@@ -1,0 +1,56 @@
+#Bowling game function
+#Lycurgus Lines
+#7/27/2020
+
+
+def bowling_score(score_string):
+    conversion_table = {
+        '0': 0,
+        '1': 1,
+        '2': 2,
+        '3': 3,
+        '4': 4,
+        '5': 5,
+        '6': 6,
+        '7': 7,
+        '8': 8,
+        '9': 9,
+        'X': 10,
+        '/': 10}
+    #converted raw input into mathematical figures
+    score_list = score_string.split('-')
+    #split raw input into list separated by frames.
+
+    running_score = 0
+    #initialize score variable
+    for i, frame in enumerate(score_list):
+        frame_score = 0
+        #initialize frame's score
+        if frame == 'X':
+            frame_score = 10
+            next_frame = score_list[i + 1]
+            frame_score += conversion_table[next_frame[0]]
+            if len(next_frame) == 1:
+                frame_score += conversion_table[score_list[i + 2][0]]
+            else:
+                frame_score += conversion_table[next_frame[1]]
+        #the strike must be able to call and add future frames in order to calculate successfully
+        elif frame[1] == '/' and len(frame) == 2:
+            frame_score = 10
+            frame_score += conversion_table[score_list[i + 1][0]]
+        else:
+            if i == 9 and frame[1] == '/':
+                frame_score += 10 + conversion_table[frame[2]]
+            else:
+                for c in frame:
+                    frame_score += conversion_table[c]
+
+        running_score += frame_score
+        #Un-comment the next line to return the score after each frame
+        #return frame_score
+    return running_score
+
+
+
+score_string = input("Enter your bowling scores here in this format 5/-54-X-6/-X-52-90-54-9/-X5/: ")
+print(bowling_score(score_string))
